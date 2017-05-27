@@ -18,14 +18,19 @@ class TulingWXBot(WXBot):
             cf.read('conf.ini')
             self.tuling_key = cf.get('main', 'key')
         except Exception:
-            pass
-        print 'tuling_key:', self.tuling_key
+            print 'can not find a useful key'
+        #print 'tuling_key:', self.tuling_key
 
     def tuling_auto_reply(self, uid, msg):
         if self.tuling_key:
             url = "http://www.tuling123.com/openapi/api"
             user_id = uid.replace('@', '')[:30]
-            body = {'key': self.tuling_key, 'info': msg.encode('utf8'), 'userid': user_id}
+            print user_id
+            body = {
+                'key': self.tuling_key, 
+                'info': msg.encode('utf8'), 
+                'userid': user_id
+            }
             r = requests.post(url, data=body)
             respond = json.loads(r.text)
             result = ''
@@ -99,7 +104,7 @@ class TulingWXBot(WXBot):
 def main():
     bot = TulingWXBot()
     bot.DEBUG = True
-    bot.conf['qr'] = 'png'
+    bot.conf['qr'] = 'tty'
 
     bot.run()
 
